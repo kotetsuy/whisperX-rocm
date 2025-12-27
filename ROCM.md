@@ -124,3 +124,34 @@ Set `HSA_OVERRIDE_GFX_VERSION` based on your GPU:
 ## Upstream
 
 - Original: [m-bain/whisperX](https://github.com/m-bain/whisperX)
+
+## Known Issues
+
+### Memory Access Fault on Long Audio
+
+When transcribing longer audio files (>60s), you may encounter:
+
+```
+Memory access fault by GPU node-1 (Agent handle: 0x...) on address 0x...
+Reason: Page not present or supervisor privilege.
+```
+
+**Status**: Under investigation. Short clips (~60s) work fine at ~28x realtime with small model.
+
+**Workaround**: Process audio in chunks, or use CPU mode for long files.
+
+**Working example** (first 60s):
+```python
+from faster_whisper import WhisperModel
+model = WhisperModel("small", device="cuda", compute_type="float16")
+segments, info = model.transcribe("audio.wav", language="en", clip_timestamps=[0, 60])
+```
+
+**Search terms for updates**:
+- `"Memory access fault by GPU node" "Page not present or supervisor privilege" ROCm 7.1 PyTorch site:github.com`
+- `"Memory access fault" ROCm CTranslate2 faster-whisper gfx1101`
+
+This may be related to:
+- ROCm 7.1.1 + PyTorch nightly (2.11.0+rocm7.0) incompatibility
+- GPU memory fragmentation with longer sequences
+- HIP/ROCm memory management issues with certain operations
