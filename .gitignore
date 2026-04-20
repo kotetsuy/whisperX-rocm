@@ -170,5 +170,3 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
-# Local Japanese documentation
-READMEJ.md
