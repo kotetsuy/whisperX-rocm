@@ -11,7 +11,7 @@ AMD GPU（ROCm）環境でWhisperXを動作させるための手順まとめで�
 
 ## 1. リポジトリのclone
 
-GitHubで [kotetsuy/whisperX-rocm](https://github.com/kotetsuy/whisperX-rocm) をforkし、cloneします。
+GitHubで [kotetsuy/whisperX-rocm](https://github.com/kotetsuy/whisperX-rocm) をcloneします。
 
 ```bash
 mkdir -p ~/AIzunda && cd ~/AIzunda
@@ -29,22 +29,6 @@ wget "https://repo.radeon.com/rocm/manylinux/rocm-rel-7.2.1/torch-2.9.1%2Brocm7.
 wget "https://repo.radeon.com/rocm/manylinux/rocm-rel-7.2.1/torchvision-0.24.0%2Brocm7.2.1.gitb919bd0c-cp312-cp312-linux_x86_64.whl"
 wget "https://repo.radeon.com/rocm/manylinux/rocm-rel-7.2.1/torchaudio-2.9.0%2Brocm7.2.1.gite3c6ee2b-cp312-cp312-linux_x86_64.whl"
 wget "https://repo.radeon.com/rocm/manylinux/rocm-rel-7.2.1/triton-3.5.1%2Brocm7.2.1.gita272dfa8-cp312-cp312-linux_x86_64.whl"
-
-# インストール
-pip3 install --break-system-packages \
-  torch-2.9.1+rocm7.2.1.lw.gitff65f5bc-cp312-cp312-linux_x86_64.whl \
-  torchvision-0.24.0+rocm7.2.1.gitb919bd0c-cp312-cp312-linux_x86_64.whl \
-  torchaudio-2.9.0+rocm7.2.1.gite3c6ee2b-cp312-cp312-linux_x86_64.whl \
-  triton-3.5.1+rocm7.2.1.gita272dfa8-cp312-cp312-linux_x86_64.whl
-```
-
-動作確認：
-
-```bash
-HSA_OVERRIDE_GFX_VERSION=11.5.1 python3 -c \
-  "import torch; print(torch.__version__); print(torch.cuda.is_available())"
-# 期待値: 2.9.1+rocm7.2.1... / True
-```
 
 ## 3. CTranslate2（ROCm版）のビルド
 
@@ -86,7 +70,7 @@ uv venv --python 3.12
 source .venv/bin/activate
 ```
 
-ROCm版pytorchのインストール：
+ROCm版pytorchのインストール:
 ```
 uv pip install \
   ~/AIzunda/wheels/torch-2.9.1+rocm7.2.1.lw.gitff65f5bc-cp312-cp312-linux_x86_64.whl \
@@ -96,7 +80,16 @@ uv pip install \
 
 ```
 
-ctranslate2：
+動作確認：
+
+```bash
+HSA_OVERRIDE_GFX_VERSION=11.5.1 python3 -c \
+  "import torch; print(torch.__version__); print(torch.cuda.is_available())"
+# 期待値: 2.9.1+rocm7.2.1... / True
+```
+
+
+ctranslate2:
 
 ```
 export CTRANSLATE2_ROOT=/usr/local
