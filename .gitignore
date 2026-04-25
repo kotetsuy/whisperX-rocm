@@ -171,3 +171,5 @@ cython_debug/
 .pypirc
 
 sample.*
+sample_stereo.wav
+
