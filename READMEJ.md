@@ -2,10 +2,6 @@
 
 AMD GPU（ROCm）環境でWhisperXを動作させるための手順まとめです。
 
-:::note 
-もとはROCm7.2.0で動かしていましたが、7.2.1に変更しました
-:::
-
 ## 動作確認環境
 
 - **OS**: Ubuntu 24.04.4 LTS
@@ -13,14 +9,13 @@ AMD GPU（ROCm）環境でWhisperXを動作させるための手順まとめで�
 - **ROCm**: 7.2.1
 - **Python**: 3.12.3
 
-## 1. リポジトリのfork・clone
+## 1. リポジトリのclone
 
-GitHubで [paralin/whisperX-rocm](https://github.com/paralin/whisperX-rocm) をforkし、cloneします。
+GitHubで [kotetsuy/whisperX-rocm](https://github.com/kotetsuy/whisperX-rocm) をforkし、cloneします。
 
 ```bash
-git clone git@github.com:<あなたのユーザー名>/whisperX-rocm.git ~/AIzunda/whisperX-rocm
-cd ~/AIzunda/whisperX-rocm
-git checkout -b rocm-nucbox-patch
+mkdir -p ~/AIZunda && cd ~/AIZunda
+git clone -b rocm-nucbox-patch git@github.com:kotetsuy/whisperX-rocm.git ~/AIzunda/whisperX-rocm
 ```
 
 ## 2. PyTorch（ROCm版）のインストール
