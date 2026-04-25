@@ -72,6 +72,7 @@ WhisperXの依存パッケージをインストールします。この時点で
 
 ```bash
 uv pip install -e .
+uv pip install fastapi uvicorn python-multipart
 ```
 
 ## Step 6: ROCm版PyTorchで上書き（最重要）
