@@ -18,9 +18,9 @@ mkdir -p ~/AIzunda && cd ~/AIzunda
 git clone -b rocm-nucbox-patch git@github.com:kotetsuy/whisperX-rocm.git ~/AIzunda/whisperX-rocm
 ```
 
-## 2. PyTorch（ROCm版）のインストール
+## 2. PyTorch（ROCm版）のダウンロード
 
-AMD公式リポジトリからROCm 7.2.1対応wheelを取得してインストールします。
+AMD公式リポジトリからROCm 7.2.1対応wheelを取得してダウンロードします。
 
 ```bash
 # wheelをダウンロード
@@ -78,11 +78,27 @@ cmake .. -DWITH_HIP=ON -DWITH_MKL=OFF -DWITH_OPENBLAS=ON \
 make -j$(nproc) && sudo make install
 ```
 
-Pythonバインディングのインストール：
+venv作成：
 
 ```bash
 cd ~/AIzunda/whisperX-rocm
 uv venv --python 3.12
+source .venv/bin/activate
+```
+
+ROCm版pytorchのインストール：
+```
+uv pip install \
+  ~/AIzunda/wheels/torch-2.9.1+rocm7.2.1.lw.gitff65f5bc-cp312-cp312-linux_x86_64.whl \
+  ~/AIzunda/wheels/torchvision-0.24.0+rocm7.2.1.gitb919bd0c-cp312-cp312-linux_x86_64.whl \
+  ~/AIzunda/wheels/torchaudio-2.9.0+rocm7.2.1.gite3c6ee2b-cp312-cp312-linux_x86_64.whl \
+  ~/AIzunda/wheels/triton-3.5.1+rocm7.2.1.gita272dfa8-cp312-cp312-linux_x86_64.whl
+
+```
+
+ctranslate2：
+
+```
 export CTRANSLATE2_ROOT=/usr/local
 uv pip install --reinstall pybind11 ~/AIzunda/ctranslate2-rocm/python
 ```
@@ -91,7 +107,7 @@ uv pip install --reinstall pybind11 ~/AIzunda/ctranslate2-rocm/python
 
 ```bash
 cd ~/AIzunda/whisperX-rocm
-uv pip install -e .
+uv pip install -e . --no-deps
 ```
 
 ## 5. 依存パッケージへのパッチ適用
@@ -100,6 +116,7 @@ uv pip install -e .
 
 ```bash
 cd ~/AIzunda/whisperX-rocm
+source .venv/bin/activate
 bash patches/apply_all.sh
 ```
 
@@ -117,6 +134,8 @@ bash patches/apply_all.sh
 ## 6. 実行
 
 ```bash
+#　オーディオサンプルはご自分で探してください
+
 export HSA_OVERRIDE_GFX_VERSION=11.5.1
 export ROCM_PATH=/opt/rocm
 export HIP_VISIBLE_DEVICES=0
@@ -124,20 +143,7 @@ export LD_LIBRARY_PATH=/usr/local/lib:/opt/rocm/lib:/opt/rocm/lib/llvm/lib:$LD_L
 
 # 基本の文字起こし
 whisperx audio.wav --model small --language ja --device cuda --compute_type float16
-
-# 話者区別あり
-whisperx audio.wav --model large-v2 --language ja --compute_type float32 --diarize
 ```
-
-## GPU Architecture 対応表
-
-| GPU | アーキテクチャ | HSA_OVERRIDE_GFX_VERSION |
-|---|---|---|
-| RYZEN AI MAX+ 395 (Radeon 8060S) | gfx1151 | 11.5.1 |
-| RX 7900 XTX/XT | gfx1100 | 11.0.0 |
-| RX 7800/7700 XT | gfx1101 | 11.0.1 |
-| RX 7600 | gfx1102 | 11.0.2 |
-| RX 6900/6800/6700 | gfx1030 | 10.3.0 |
 
 ## 参考
 
