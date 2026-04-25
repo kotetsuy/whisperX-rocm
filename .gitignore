@@ -172,4 +172,9 @@ cython_debug/
 
 sample.*
 sample_stereo.wav
+audio.json
+audio.srt
+audio.tsv
+audio.txt
+audio.vtt
 
