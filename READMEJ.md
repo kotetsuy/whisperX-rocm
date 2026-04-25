@@ -14,7 +14,7 @@ AMD GPU（ROCm）環境でWhisperXを動作させるための手順まとめで�
 GitHubで [kotetsuy/whisperX-rocm](https://github.com/kotetsuy/whisperX-rocm) をforkし、cloneします。
 
 ```bash
-mkdir -p ~/AIZunda && cd ~/AIZunda
+mkdir -p ~/AIzunda && cd ~/AIzunda
 git clone -b rocm-nucbox-patch git@github.com:kotetsuy/whisperX-rocm.git ~/AIzunda/whisperX-rocm
 ```
 
@@ -51,8 +51,10 @@ HSA_OVERRIDE_GFX_VERSION=11.5.1 python3 -c \
 [paralin/ctranslate2-rocm](https://github.com/paralin/ctranslate2-rocm) をソースからビルドします。
 
 ```bash
+cd ~/AIzunda
 git clone https://github.com/paralin/ctranslate2-rocm.git ~/AIzunda/ctranslate2-rocm
 cd ~/AIzunda/ctranslate2-rocm
+git submodule update --init --recursive
 mkdir -p build && cd build
 
 export HSA_OVERRIDE_GFX_VERSION=11.5.1
