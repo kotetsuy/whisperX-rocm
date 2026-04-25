@@ -57,6 +57,13 @@ cd ~/AIzunda/ctranslate2-rocm
 git submodule update --init --recursive
 mkdir -p build && cd build
 
+# clang22対応パッチ
+
+sed -i 's/model\.use_flash_attention(),$/model.use_flash_attention()/' \
+  ~/AIzunda/ctranslate2-rocm/src/layers/whisper.cc
+sed -i 's/_use_flash_attention,$/_use_flash_attention/' \
+  ~/AIzunda/ctranslate2-rocm/src/layers/transformer.cc
+
 export HSA_OVERRIDE_GFX_VERSION=11.5.1
 export AMDGPU_TARGETS=gfx1151
 
