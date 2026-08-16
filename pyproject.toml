@@ -19,8 +19,11 @@ dependencies = [
     "av<16.0.0",
     "numpy>=2.1.0,<2.3.0; python_version >='3.13'",
     "pyannote-audio>=3.3.2,<4.0.0",
-    "torch~=2.8.0",
-    "torchaudio~=2.8.0",
+    # torchaudio must stay <2.9: pyannote-audio uses torchaudio.info /
+    # AudioMetaData, removed in torchaudio 2.9+. gfx1151 wheels ship 2.8.0a0
+    # (pre-release), so allow it explicitly.
+    "torch>=2.8.0,<2.9.0",
+    "torchaudio>=2.8.0a0,<2.9.0",
     "transformers>=4.48.0",
     "triton>=3.3.0; sys_platform == 'linux' and platform_machine == 'x86_64'" # only install triton on x86_64 Linux
 ]
@@ -56,7 +59,9 @@ triton = [
 
 [[tool.uv.index]]
 name = "pytorch"
-url = "https://download.pytorch.org/whl/cu128"
+# gfx1151 (Strix Halo) 専用ホイール。multi-arch 版は kpack ロード失敗
+# (hipErrorInvalidImage) するため必ずこの arch 別インデックスを使う。
+url = "https://repo.amd.com/rocm/whl/gfx1151/"
 explicit = true
 
 [[tool.uv.index]]
